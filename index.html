@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API - Fun with Dog Pictures!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        #dogImage {
+            max-width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .loading {
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .info-box {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐕 Random Dog Picture Generator</h1>
+        <p>Learn about the Fetch API by getting random dog pictures from the internet!</p>
+        
+        <button id="fetchBtn">Get Random Dog Picture</button>
+        
+        <div id="loading" class="loading" style="display: none;">Loading...</div>
+        
+        <img id="dogImage" alt="Random dog">
+        
+        <div class="info-box">
+            <h3>How does this work?</h3>
+            <p><strong>Fetch API</strong> lets us get data from the internet!</p>
+            <p>When you click the button, JavaScript uses <code>fetch()</code> to ask a website for a random dog picture. The website sends back the picture URL, and we display it!</p>
+            <p><strong>Try it:</strong> Click the button above to see a new dog each time!</p>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('fetchBtn');
+        const img = document.getElementById('dogImage');
+        const loading = document.getElementById('loading');
+        
+        // This function runs when you click the button
+        btn.addEventListener('click', getDogPicture);
+        
+        function getDogPicture() {
+            // Disable button and show loading message
+            btn.disabled = true;
+            loading.style.display = 'block';
+            img.style.display = 'none';
+            
+            // Use Fetch API to get data from the Dog API
+            fetch('https://dog.ceo/api/breeds/image/random')
+                .then(response => response.json()) // Convert response to JSON
+                .then(data => {
+                    // Hide loading and show the dog image
+                    loading.style.display = 'none';
+                    img.src = data.message; // Set image source to the URL we got
+                    img.style.display = 'block';
+                    btn.disabled = false;
+                })
+                .catch(error => {
+                    // If something goes wrong, show an error message
+                    loading.style.display = 'none';
+                    alert('Oops! Something went wrong. Try again!');
+                    btn.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>
